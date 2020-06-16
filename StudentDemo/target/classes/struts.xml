@@ -5,7 +5,13 @@
 
 
 <struts>
-	<package name="default" extends="struts-default"></package>
+
+
+	<package namespace="/" name="default" extends="struts-default">
+		<action name="/">
+			<result name="success">/index.jsp</result>
+		</action>
+	</package>
 
 	<package name="json" extends="json-default">
 		<action name="saveStudent"
