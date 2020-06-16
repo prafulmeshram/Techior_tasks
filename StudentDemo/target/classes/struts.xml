@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+        "http://struts.apache.org/dtds/struts-2.5.dtd">
+
+
+<struts>
+	<package name="default" extends="struts-default"></package>
+
+	<package name="json" extends="json-default">
+		<action name="saveStudent"
+			class="com.techior.student.actions.StudentAction">
+
+			<interceptor-ref name="jsonValidationWorkflowStack" />
+			<interceptor-ref name="fileUpload">
+				<param name="maximumSize">2097152</param>
+				<param name="allowedTypes">
+					image/png,image/jpeg,image/pjpeg
+				</param>
+			</interceptor-ref>
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+
+			<result name="success" type="json">
+				<param name="noCache">true</param>
+				<param name="excludeNullProperties">true</param>
+				<param name="root">jsonResponse</param>
+				/index.jsp
+			</result>
+			<result name="input" type="json">
+				<param name="root">fieldErrors</param>
+				/index.jsp
+			</result>
+		</action>
+
+
+		<action name="studentList"
+			class="com.techior.student.actions.StudentAction"
+			method="getStudentList">
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<result name="success" type="json">
+				<param name="root">students</param>
+				/index.jsp
+			</result>
+
+		</action>
+	</package>
+
+</struts>
