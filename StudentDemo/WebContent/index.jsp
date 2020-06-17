@@ -12,7 +12,7 @@
 	rel="stylesheet" type="text/css" />
 
 </head>
-<sx:head />
+
 <s:head />
 <body>
 
@@ -34,7 +34,7 @@
 							style="display: none"></div>
 
 						<s:form action="saveStudent" method="post" id="studentForm"
-							cssClass="form-horizontal" theme="simple" validate="true"
+							cssClass="form-horizontal" theme="simple"
 							enctype="multipart/form-data">
 
 							<div class="row form-group">
@@ -89,16 +89,13 @@
 									<s:file id="image" name="image" class="form-control"
 										accept="image/*" />
 								</div>
-
-
-
 							</div>
 							<hr />
 
 							<div class="row form-group">
 								<div class="col-md-8"></div>
 								<div class="col-md-4">
-									<s:submit name="submit" value="REGISTER" id="submit"
+									<s:submit id="submit" name="submit" value="REGISTER"
 										cssClass="btn btn-primary btn-block" />
 								</div>
 							</div>
@@ -140,7 +137,6 @@
 			<div class="col-md-2"></div>
 		</div>
 	</div>
-
 </body>
 
 <script type="text/javascript" src="assets/js/jquery-3.5.1.min.js"></script>
@@ -148,107 +144,11 @@
 <script type="text/javascript" src="assets/js/additional-methods.min.js"></script>
 <script type="text/javascript"
 	src="assets/bootstrap-4.4.1-dist/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="assets/js/studentValidation.js"></script>
 
 
 
 
-<script type="text/javascript">
-	$(document).ready(function() {
-
-		 $.validator.addMethod("emailId", function(value, element) {
-             return this.optional(element) || /^[a-zA-Z0-9._-]+@[a-zA-Z0-9-]+\.[a-zA-Z.]{2,5}$/i.test(value);
-         }, "Please enter a valid email address.");
-
-		 $.validator.addMethod("mobileNumber", function(value, element) {
-             return this.optional(element) || /^[0-9]+$/i.test(value);
-         }, "Please enter a valid Mobile Number");
-
-
-		
-		$("#studentForm").validate({
-			ignore : ":hidden",
-			rules : {
-				firstName : {
-					required : true,
-					minlength : 3,
-					maxlength : 50
-					
-				},
-				lastName : {
-					required : true,
-					minlength : 3,
-					maxlength : 50
-				},
-				mobileNumber : {
-					required : true,
-					minlength : 10,
-					maxlength : 15,
-					mobileNumber : mobileNumber
-				},
-				emailId : {
-					required : true,
-					minlength : 10,
-					maxlength : 100,
-					emailId : emailId
-				},
-				image : {
-					required : true,
-				}
-
-			},/*  messages: {
-	            "firstName": {
-	                required: "Please provide a password",
-	                maxlength:"Max 10",
-	              
-	            },
-	            "lastName": {
-	                required: "Please provide a password",
-	                maxlength:"Max 10",
-	              
-	            }
-	        }, */
-			submitHandler : function(form) {
-
-				$("#studentForm").submit(function(e) {
-					e.preventDefault();
-					var data = new FormData();
-					var firstName = $("#firstName").val();
-					var lastName = $("#lastName").val();
-					var mobileNumber = $("#mobileNumber").val();
-					var emailId = $("#emailId").val();
-
-					data.append('firstName', firstName);
-					data.append('lastName', lastName);
-					data.append('mobileNumber', mobileNumber);
-					data.append('emailId', emailId);
-					data.append('imageName', $("#image")[0].files[0].name);
-					data.append('image', $("#image")[0].files[0]);
-
-					$.ajax({
-						type : "post",
-						async : true,
-						url : "saveStudent.action",
-						data : data,
-						enctype : "multipart/form-data",
-						cache : false,
-						contentType : false,
-						processData : false,
-						success : function(response) {
-							var jsonObject = JSON.parse(response);
-							$("#successAlert").css('display', 'block');
-							$("#successAlert").html(jsonObject.message);
-						},
-						error : function(error) {
-							alert("Error Occured" + JSON.stringify(error));
-
-						}
-					});
-				});
-			}
-		});
-	});
-
-</script>
 
 
 <script type="text/javascript">

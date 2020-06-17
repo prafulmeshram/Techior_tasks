@@ -37,36 +37,38 @@ public class ContextListener implements ServletContextListener {
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
 
-		String message = "Hello Sir / Madam, Your Application " + sce.getServletContext().getContextPath()
-				+ " is Terminated /  Ended At " + new Date().toString() + "Please Contact To Support  ";
-
-		String status = this.applogService.saveApplicationLog(new ApplicationLog("end", new Date().toString()));
-		boolean sent = this.mailService.sendApplogMail("Application End Event", message);
-		if (status.equalsIgnoreCase(Constants.STATUS_FAILED)) {
-			System.out.println("Error While Saving Application Log");
-		}
-
-		if (!sent) {
-			System.out.println("Error Occured While Sending Email");
-		}
+		/*
+		 * String message = "Hello Sir / Madam, Your Application " +
+		 * sce.getServletContext().getContextPath() + " is Terminated /  Ended At " +
+		 * new Date().toString() + "Please Contact To Support  ";
+		 * 
+		 * String status = this.applogService.saveApplicationLog(new
+		 * ApplicationLog("end", new Date().toString())); boolean sent =
+		 * this.mailService.sendApplogMail("Application End Event", message); if
+		 * (status.equalsIgnoreCase(Constants.STATUS_FAILED)) {
+		 * System.out.println("Error While Saving Application Log"); }
+		 * 
+		 * if (!sent) { System.out.println("Error Occured While Sending Email"); }
+		 */
 
 	}
 
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
 
-		String message = "Hello Sir / Madam, Your Application " + sce.getServletContext().getContextPath()
-				+ " is Started  At " + new Date().toString() + "Please Contact To Support  ";
-		String status = this.applogService.saveApplicationLog(new ApplicationLog("start", new Date().toString()));
-		boolean sent = this.mailService.sendApplogMail("Application Start Event", message);
-
-		if (status.equalsIgnoreCase(Constants.STATUS_FAILED)) {
-			System.out.println("Error While Saving Application Log");
-		}
-
-		if (!sent) {
-			System.out.println("Error Occured While Sending Email");
-		}
+		/*
+		 * String message = "Hello Sir / Madam, Your Application " +
+		 * sce.getServletContext().getContextPath() + " is Started  At " + new
+		 * Date().toString() + "Please Contact To Support  "; String status =
+		 * this.applogService.saveApplicationLog(new ApplicationLog("start", new
+		 * Date().toString())); boolean sent =
+		 * this.mailService.sendApplogMail("Application Start Event", message);
+		 * 
+		 * if (status.equalsIgnoreCase(Constants.STATUS_FAILED)) {
+		 * System.out.println("Error While Saving Application Log"); }
+		 * 
+		 * if (!sent) { System.out.println("Error Occured While Sending Email"); }
+		 */
 
 	}
 

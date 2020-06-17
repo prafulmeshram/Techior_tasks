@@ -47,7 +47,6 @@ public class StudentAction extends ActionSupport implements ModelDriven<Student>
 	Student student = new Student();
 	String filePath = httpServletRequest.getSession().getServletContext().getRealPath("/");
 	List<Student> students = new ArrayList<Student>();
-	
 
 	private StudentDao studentDao = new StudentDaoImpl();
 	Gson gson = new Gson();
@@ -66,12 +65,10 @@ public class StudentAction extends ActionSupport implements ModelDriven<Student>
 
 			JSONObject jsonObject = new JSONObject();
 			jsonObject.put("message", "Student Registered Successfully");
-
 			jsonResponse = jsonObject.toJSONString();
-		
 			return SUCCESS;
 		} else {
-		
+
 			return INPUT;
 		}
 	}
