@@ -29,7 +29,7 @@ public class StudentAcadDetails implements Serializable {
 	private Integer detId;
 	private String academicYear;
 	private String standard;
-	private Character section;
+	private String section;
 	private String schoolName;
 	private Integer studentId;
 
@@ -41,7 +41,7 @@ public class StudentAcadDetails implements Serializable {
 	 * @param schoolName
 	 * @param studentId
 	 */
-	public StudentAcadDetails(Integer detId, String academicYear, String standard, Character section, String schoolName,
+	public StudentAcadDetails(Integer detId, String academicYear, String standard, String section, String schoolName,
 			Integer studentId) {
 		super();
 		this.detId = detId;
@@ -97,14 +97,14 @@ public class StudentAcadDetails implements Serializable {
 	/**
 	 * @return the section
 	 */
-	public Character getSection() {
+	public String getSection() {
 		return section;
 	}
 
 	/**
 	 * @param section the section to set
 	 */
-	public void setSection(Character section) {
+	public void setSection(String section) {
 		this.section = section;
 	}
 
@@ -120,6 +120,20 @@ public class StudentAcadDetails implements Serializable {
 	 */
 	public void setSchoolName(String schoolName) {
 		this.schoolName = schoolName;
+	}
+
+	/**
+	 * @return the studentId
+	 */
+	public Integer getStudentId() {
+		return studentId;
+	}
+
+	/**
+	 * @param studentId the studentId to set
+	 */
+	public void setStudentId(Integer studentId) {
+		this.studentId = studentId;
 	}
 
 	@Override

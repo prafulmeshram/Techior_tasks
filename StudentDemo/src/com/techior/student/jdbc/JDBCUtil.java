@@ -19,7 +19,7 @@ public class JDBCUtil {
 	private static final String url = "jdbc:mysql://localhost:3306/db_techior_demo?createDatabaseIfNotExist=true";
 	private static final String user = "root";
 	// Enter Db Password
-	private static final String password = "Root@123";
+	private static final String password = "mysql";
 
 	// Open The Connection
 	public static Connection getConnection() {

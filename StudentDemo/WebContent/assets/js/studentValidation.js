@@ -9,6 +9,7 @@ $.validator.addMethod("mobileNumber", function(value, element) {
 
 $("#studentForm").validate({
 	ignore : ":hidden",
+
 	rules : {
 		firstName : {
 			required : true,
@@ -38,11 +39,11 @@ $("#studentForm").validate({
 		}
 
 	},
-	submitHandler : function(form) {
+	submitHandler : function() {
 		$("#studentForm").submit(function(e) {
 
 			e.preventDefault();
-			//e.stopImmediatePropagation();
+			e.stopImmediatePropagation();
 			var data = new FormData();
 			data.append('firstName', $("#firstName").val());
 			data.append('lastName', $("#lastName").val());
@@ -51,13 +52,14 @@ $("#studentForm").validate({
 			data.append('imageName', $("#image")[0].files[0].name);
 			data.append('image', $("#image")[0].files[0]);
 
-			$.ajax({
+			$
+			jQuery.ajax({
 				type : "post",
 				async : true,
 				url : "saveStudent.action",
 				data : data,
 				enctype : "multipart/form-data",
-				cache : true,
+				cache : false,
 				contentType : false,
 				processData : false,
 				success : function(response) {
@@ -74,4 +76,5 @@ $("#studentForm").validate({
 			return false;
 		})
 	}
+
 });

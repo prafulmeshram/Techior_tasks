@@ -10,7 +10,7 @@ package com.techior.student.jdbc;
  * 
  *          Created Date : 12-06-2020
  * 
- *          Updated Date : 17-06-2020
+ *          Updated Date : 18-06-2020
  *
  */
 public class QueryMaker {

@@ -16,8 +16,6 @@
 	<package name="json" extends="json-default">
 		<action name="saveStudent"
 			class="com.techior.student.actions.StudentAction">
-
-			<interceptor-ref name="jsonValidationWorkflowStack" />
 			<interceptor-ref name="fileUpload">
 				<param name="maximumSize">2097152</param>
 				<param name="allowedTypes">
@@ -47,8 +45,35 @@
 				<param name="root">students</param>
 				/index.jsp
 			</result>
-
 		</action>
+
+
+
+		<action name="loadAcadDetails"
+			class="com.techior.student.actions.StudentAcadDetAction"
+			method="getAcadDetails">
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<result name="success" type="json">
+				<param name="root">studentAcadDetailsJson</param>
+				/index.jsp
+			</result>
+		</action>
+
+		<action name="saveAcadDet"
+			class="com.techior.student.actions.StudentAcadDetAction">
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<result name="success" type="json">
+				<param name="root">saveResponseJson</param>
+				/index.jsp
+			</result>
+			<result name="input" type="json">
+				<param name="root">fieldErrors</param>
+				/index.jsp
+			</result>
+		</action>
+
+
+
 	</package>
 
 </struts>

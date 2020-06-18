@@ -36,11 +36,11 @@ public class MailServiceImpl implements MailService {
 	public boolean sendApplogMail(String subject, String msg) {
 
 		// Enter Source Email
-		final String from = "";
+		final String from = "prafulm.vanrasoft@gmail.com";
 		// Enter Password
-		final String password = "";
+		final String password = "PrAfUl1603@95";
 		// Enter Reciever
-		final String to = "";
+		final String to = "nitin.chopkar@techior.com";
 
 		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");
