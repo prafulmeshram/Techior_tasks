@@ -47,6 +47,42 @@
 			</result>
 		</action>
 
+		<action name="studentPage"
+			class="com.techior.student.actions.StudentAction"
+			method="paginateStudents">
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<result name="success" type="json">
+				<param name="root">jsonStudentPageList</param>
+				/index.jsp
+			</result>
+		</action>
+
+
+		<action name="fieldSearch"
+			class="com.techior.student.actions.StudentAction"
+			method="searchByFields">
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<result name="success" type="json">
+				<param name="root">jsonStudentFieldSearch</param>
+				/index.jsp
+			</result>
+		</action>
+
+
+		<action name="dateSearch"
+			class="com.techior.student.actions.StudentAction"
+			method="searchByDates">
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<result name="success" type="json">
+				<param name="root">jsonStudentDateSearch</param>
+				/index.jsp
+			</result>
+		</action>
+
+
+
+
+
 
 
 		<action name="loadAcadDetails"

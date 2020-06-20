@@ -28,7 +28,7 @@ public class ContextListener implements ServletContextListener {
 	 * 
 	 */
 	public ContextListener() {
-		// TODO Auto-generated constructor stub
+
 	}
 
 	private MailService mailService = new MailServiceImpl();
@@ -38,7 +38,7 @@ public class ContextListener implements ServletContextListener {
 	public void contextDestroyed(ServletContextEvent sce) {
 
 		String message = "Hello Sir / Madam, Your Application " + sce.getServletContext().getContextPath()
-				+ " is Terminated /  Ended At " + new Date().toString() + "Please Contact To Support  ";
+				+ " is Terminated /  Ended At " + new Date().toString() + "Please Contact To Support For Queries ";
 
 		String status = this.applogService.saveApplicationLog(new ApplicationLog("end", new Date().toString()));
 		boolean sent = this.mailService.sendApplogMail("Application End Event", message);
@@ -56,7 +56,7 @@ public class ContextListener implements ServletContextListener {
 	public void contextInitialized(ServletContextEvent sce) {
 
 		String message = "Hello Sir / Madam, Your Application " + sce.getServletContext().getContextPath()
-				+ " is Started  At " + new Date().toString() + "Please Contact To Support  ";
+				+ " is Started  At " + new Date().toString() + "Please Contact To Support For Any Queries ";
 		String status = this.applogService.saveApplicationLog(new ApplicationLog("start", new Date().toString()));
 		boolean sent = this.mailService.sendApplogMail("Application Start Event", message);
 

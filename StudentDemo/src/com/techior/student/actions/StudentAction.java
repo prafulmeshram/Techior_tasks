@@ -5,24 +5,26 @@ package com.techior.student.actions;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.struts2.ServletActionContext;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import com.google.gson.Gson;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
-import com.techior.student.dao.StudentDao;
-import com.techior.student.dao.impl.StudentDaoImpl;
 import com.techior.student.model.Student;
+import com.techior.student.service.StudentService;
+import com.techior.student.service.impl.StudentServiceImpl;
 import com.techior.student.util.Constants;
+import com.techior.student.util.StudentListUtil;
 
 /**
  * @author PRAFUL MESHRAM
@@ -30,8 +32,8 @@ import com.techior.student.util.Constants;
  * 
  *          Created Date : 12-06-2020
  * 
+ *          Updated Date : 19-06-2020
  * 
- *
  */
 public class StudentAction extends ActionSupport implements ModelDriven<Student> {
 
@@ -44,54 +46,78 @@ public class StudentAction extends ActionSupport implements ModelDriven<Student>
 			.get(ServletActionContext.HTTP_REQUEST);
 	String jsonResponse;
 	String jsonStudentList;
+	String jsonStudentPageList;
+	String jsonStudentFieldSearch;
+	String jsonStudentDateSearch;
 	Student student = new Student();
 	String filePath = httpServletRequest.getSession().getServletContext().getRealPath("/");
 	List<Student> students = new ArrayList<Student>();
+	private StudentService studentService = new StudentServiceImpl();
 
-	private StudentDao studentDao = new StudentDaoImpl();
-	Gson gson = new Gson();
+	private String firstNameSearch;
+	private String lastNameSearch;
+	private String emailIdSearch;
+	private String mobileNumberSearch;
+
+	private String fromDate;
+	private String toDate;
 
 	@SuppressWarnings("unchecked")
 	public String execute() throws IOException {
-
 		if (student.getImage() != null) {
 			File fileToCreate = new File(filePath, student.getImageName());
 			FileUtils.copyFile(student.getImage(), fileToCreate);
 		}
-
-		String status = this.studentDao.saveStudent(student);
-
+		student.setRegistrationDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+		String status = this.studentService.saveStudent(student);
 		if (status.equalsIgnoreCase(Constants.STATUS_SUCCESS)) {
-
 			JSONObject jsonObject = new JSONObject();
 			jsonObject.put("message", "Student Registered Successfully");
 			jsonResponse = jsonObject.toJSONString();
 			return SUCCESS;
 		} else {
-
 			return INPUT;
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public String getStudentList() {
+		students = this.studentService.findAllStudents();
+		jsonStudentList = StudentListUtil.convertStudentListToJson(students).toJSONString();
+		return SUCCESS;
+	}
 
-		students = this.studentDao.findAllStudents();
+	public String paginateStudents() {
+		Integer pageNumber = 0;
+		Integer limit = 0;
 
-		JSONArray jsonArray = new JSONArray();
+		pageNumber = Integer.parseInt(httpServletRequest.getParameter("limit"));
+		limit = Integer.parseInt(httpServletRequest.getParameter("pageNumber"));
 
-		for (Student student : students) {
-			JSONObject jsonObject = new JSONObject();
+		JSONObject jsonObject = new JSONObject();
+		jsonObject = this.studentService.paginateStudents(pageNumber, limit);
 
-			jsonObject.put("firstName", student.getFirstName());
-			jsonObject.put("lastName", student.getLastName());
-			jsonObject.put("emailId", student.getEmailId());
-			jsonObject.put("mobileNumber", student.getMobileNumber());
-			jsonObject.put("imageName", student.getImageName());
-			jsonArray.add(jsonObject);
-		}
+		jsonStudentPageList = jsonObject.toJSONString();
 
-		jsonStudentList = jsonArray.toJSONString();
+		return SUCCESS;
+	}
+
+	public String searchByFields() {
+
+		List<Student> students = new ArrayList<Student>();
+
+		students = this.studentService.filterByFields(firstNameSearch, lastNameSearch, emailIdSearch,
+				mobileNumberSearch);
+
+		jsonStudentFieldSearch = StudentListUtil.convertStudentListToJson(students).toJSONString();
+		return SUCCESS;
+	}
+
+	public String searchByDates() throws ParseException {
+		List<Student> students = new ArrayList<Student>();
+
+		students = this.studentService.filterByDates(fromDate, toDate);
+
+		jsonStudentDateSearch = StudentListUtil.convertStudentListToJson(students).toJSONString();
 		return SUCCESS;
 	}
 
@@ -183,6 +209,146 @@ public class StudentAction extends ActionSupport implements ModelDriven<Student>
 	 */
 	public void setStudents(List<Student> students) {
 		this.students = students;
+	}
+
+	/**
+	 * @return the jsonStudentPageList
+	 */
+	public String getJsonStudentPageList() {
+		return jsonStudentPageList;
+	}
+
+	/**
+	 * @param jsonStudentPageList the jsonStudentPageList to set
+	 */
+	public void setJsonStudentPageList(String jsonStudentPageList) {
+		this.jsonStudentPageList = jsonStudentPageList;
+	}
+
+	/**
+	 * @return the studentService
+	 */
+	public StudentService getStudentService() {
+		return studentService;
+	}
+
+	/**
+	 * @param studentService the studentService to set
+	 */
+	public void setStudentService(StudentService studentService) {
+		this.studentService = studentService;
+	}
+
+	/**
+	 * @return the jsonStudentFieldSearch
+	 */
+	public String getJsonStudentFieldSearch() {
+		return jsonStudentFieldSearch;
+	}
+
+	/**
+	 * @param jsonStudentFieldSearch the jsonStudentFieldSearch to set
+	 */
+	public void setJsonStudentFieldSearch(String jsonStudentFieldSearch) {
+		this.jsonStudentFieldSearch = jsonStudentFieldSearch;
+	}
+
+	/**
+	 * @return the jsonStudentDateSearch
+	 */
+	public String getJsonStudentDateSearch() {
+		return jsonStudentDateSearch;
+	}
+
+	/**
+	 * @param jsonStudentDateSearch the jsonStudentDateSearch to set
+	 */
+	public void setJsonStudentDateSearch(String jsonStudentDateSearch) {
+		this.jsonStudentDateSearch = jsonStudentDateSearch;
+	}
+
+	/**
+	 * @return the firstNameSearch
+	 */
+	public String getFirstNameSearch() {
+		return firstNameSearch;
+	}
+
+	/**
+	 * @param firstNameSearch the firstNameSearch to set
+	 */
+	public void setFirstNameSearch(String firstNameSearch) {
+		this.firstNameSearch = firstNameSearch;
+	}
+
+	/**
+	 * @return the lastNameSearch
+	 */
+	public String getLastNameSearch() {
+		return lastNameSearch;
+	}
+
+	/**
+	 * @param lastNameSearch the lastNameSearch to set
+	 */
+	public void setLastNameSearch(String lastNameSearch) {
+		this.lastNameSearch = lastNameSearch;
+	}
+
+	/**
+	 * @return the emailIdSearch
+	 */
+	public String getEmailIdSearch() {
+		return emailIdSearch;
+	}
+
+	/**
+	 * @param emailIdSearch the emailIdSearch to set
+	 */
+	public void setEmailIdSearch(String emailIdSearch) {
+		this.emailIdSearch = emailIdSearch;
+	}
+
+	/**
+	 * @return the mobileNumberSearch
+	 */
+	public String getMobileNumberSearch() {
+		return mobileNumberSearch;
+	}
+
+	/**
+	 * @param mobileNumberSearch the mobileNumberSearch to set
+	 */
+	public void setMobileNumberSearch(String mobileNumberSearch) {
+		this.mobileNumberSearch = mobileNumberSearch;
+	}
+
+	/**
+	 * @return the fromDate
+	 */
+	public String getFromDate() {
+		return fromDate;
+	}
+
+	/**
+	 * @param fromDate the fromDate to set
+	 */
+	public void setFromDate(String fromDate) {
+		this.fromDate = fromDate;
+	}
+
+	/**
+	 * @return the toDate
+	 */
+	public String getToDate() {
+		return toDate;
+	}
+
+	/**
+	 * @param toDate the toDate to set
+	 */
+	public void setToDate(String toDate) {
+		this.toDate = toDate;
 	}
 
 }

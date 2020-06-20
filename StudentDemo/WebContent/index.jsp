@@ -10,23 +10,30 @@
 <title>Welcome Page</title>
 <link href="assets/bootstrap-4.4.1-dist/css/bootstrap.min.css"
 	rel="stylesheet" type="text/css" />
-
+<link rel="stylesheet" type="text/css"
+	href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.21/af-2.3.5/b-1.6.2/b-colvis-1.6.2/b-flash-1.6.2/b-html5-1.6.2/b-print-1.6.2/cr-1.5.2/fc-3.3.1/fh-3.1.7/kt-2.5.2/r-2.2.5/rg-1.1.2/rr-1.2.7/sc-2.0.2/sp-1.1.1/sl-1.3.1/datatables.min.css" />
 </head>
 
 <s:head />
+<sx:head />
 <body>
 
-	<div class="container mt-2">
+	<div class="container mt-2 mb-2">
 		<div class="row">
-			<div class="col-md-1"></div>
-			<div class="col-md-10">
+
+			<div class="col-md-12">
 				<div class="card" id="registerCard" style="display: block;">
 					<div class="card-header">
 						<h4 class="card-title" style="display: inline-block;">Register
 							Student</h4>
-						<button class="btn btn-primary" id="btnStudentList"
+						<!-- <button class="btn btn-primary" id="btnStudentList"
+							style="display: inline-block; float: right;">Student
+							List</button> -->
+
+						<button class="btn btn-primary" id="btnStudentPageList"
 							style="display: inline-block; float: right;">Student
 							List</button>
+
 					</div>
 					<div class="card-body">
 
@@ -98,10 +105,13 @@
 							<hr />
 
 							<div class="row form-group">
-								<div class="col-md-8"></div>
-								<div class="col-md-4">
+
+								<div class="col-md-12">
 									<s:submit id="submit" name="submit" value="REGISTER"
-										cssClass="btn btn-primary btn-block" />
+										cssClass="btn btn-primary btn-md float-right" />
+									<s:reset value="RESET"
+										class="btn btn-danger btn-md float-right mr-2" />
+
 								</div>
 							</div>
 						</s:form>
@@ -115,18 +125,154 @@
 					<div class="card-header">
 						<h4 class="card-title" style="display: inline-block;">Students
 							List</h4>
-						<button class="btn btn-primary"
-							style="display: inline-block; float: right;" id="showRegister">Regsiter
+						<button class="btn btn-primary btn-sm float-right"
+							style="display: inline-block;" id="showRegister">Regsiter
 							Student</button>
 					</div>
 					<div class="card-body">
-						<table id="listTable" class="table table-striped">
+
+
+						<div class="row form-group">
+							<div class="col-md-4">
+								<input type="radio" value="fieldSearch" name="searchType"
+									id="fieldSearch" />&emsp;<label for="fieldSearch">Field
+									Wise Search</label>
+							</div>
+							<div class="col-md-4">
+								<input type="radio" value="dateSearch" name="searchType"
+									id="dateSearch" />&emsp;<label for="dateSearch">Registration
+									Date Wise Search</label>
+							</div>
+							<div class="col-md-4">
+								<input type="radio" value="allPagedResults" name="searchType"
+									id="allPagedResults" checked="checked" />&emsp;<label
+									for="allPagedResults">Show All Results</label>
+							</div>
+						</div>
+
+
+
+						<div id="fieldSearchDiv" style="display: none;">
+							<s:form action="fieldSearch.action" method="post"
+								name="fieldSearchForm" id="fieldSearchForm"
+								cssClass="form-horizontal" theme="simple">
+								<div class="row form-group">
+									<div class="col-md-2">
+										<s:textfield name="firstNameSearch" id="firstNameSearch"
+											placeholder="First Name" class="form-control" />
+									</div>
+									<div class="col-md-2">
+										<s:textfield name="lastNameSearch" id="lastNameSearch"
+											placeholder="Last Name" class="form-control" />
+									</div>
+									<div class="col-md-3">
+										<s:textfield name="emailIdSearch" id="emailIdSearch"
+											placeholder="Email Id" class="form-control" />
+									</div>
+									<div class="col-md-3">
+										<s:textfield name="mobileNumberSearch" id="mobileNumberSearch"
+											placeholder="Mobile Number" class="form-control" />
+									</div>
+									<div class="col-md-2">
+										<sx:submit cssClass="btn btn-primary btn-md" value="SEARCH"
+											id="searchFieldSubmit"></sx:submit>
+									</div>
+
+								</div>
+							</s:form>
+						</div>
+						<div id="dateSearchDiv" style="display: none;">
+							<s:form action="dateSearch.action" method="post"
+								name="dateSearchForm" id="dateSearchForm"
+								cssClass="form-horizontal" theme="simple">
+								<div class="row form-group">
+									<div class="col-md-4">
+										<div class="row">
+											<div class="col-md-4">
+												<s:label for="fromDate">From Date</s:label>
+											</div>
+											<div class="col-md-8">
+												<s:textfield name="fromDate" id="fromDate" type="date"
+													class="form-control" />
+											</div>
+
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="row">
+											<div class="col-md-4">
+												<s:label for="toDate">To Date</s:label>
+											</div>
+											<div class="col-md-8">
+												<s:textfield name="toDate" id="toDate" type="date"
+													class="form-control" />
+											</div>
+
+										</div>
+									</div>
+									<div class="col-md-4">
+										<sx:submit cssClass="btn btn-primary btn-block" value="SEARCH"
+											id="searchDateSubmit"></sx:submit>
+									</div>
+
+								</div>
+							</s:form>
+
+						</div>
+
+
+
+						<hr />
+
+
+						<div id="pagedResultArea">
+
+							<div class="row form-group" id="paginationRow">
+								<div class="col-md-2" id="limitSelectArea">
+									<div class="row">
+										<div class="col-md-6">
+											<label for="limitSelect">Show</label>
+										</div>
+										<div class="col-md-6">
+											<select name="limitSelect" id="limitSelect"
+												onchange="limitChange();" class="form-control">
+												<option selected="selected">3</option>
+												<option>5</option>
+												<option>10</option>
+												<option>25</option>
+												<option>50</option>
+											</select>
+										</div>
+									</div>
+
+								</div>
+								<div class="col-md-8" id="paginationArea">
+									<nav class="float-right">
+										<ul class="pagination pg-blue" id="pageUl">
+										</ul>
+									</nav>
+
+								</div>
+							</div>
+							<hr />
+							<div id="paginatedResults"></div>
+							<div id="normalResults"></div>
+
+						</div>
+
+
+
+						<div id="filterResultArea"></div>
+
+
+						<!-- <table id="listTable" class="table table-striped">
 							<thead>
 								<tr>
 									<th>Image</th>
 									<th>Student Name</th>
 									<th>Mobile Number</th>
 									<th>Email Id</th>
+									<th>Reg. Date</th>
 									<th>Action</th>
 								</tr>
 							</thead>
@@ -134,13 +280,13 @@
 
 							</tbody>
 
-						</table>
+						</table> -->
 					</div>
+
 				</div>
 
 
 			</div>
-			<div class="col-md-1"></div>
 		</div>
 	</div>
 
@@ -164,8 +310,6 @@
 			</div>
 		</div>
 	</div>
-
-
 </body>
 
 <script type="text/javascript" src="assets/js/jquery-3.5.1.min.js"></script>
@@ -175,6 +319,20 @@
 <script type="text/javascript"
 	src="assets/bootstrap-4.4.1-dist/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="assets/js/studentValidation.js"></script>
+<script type="text/javascript" src="assets/js/studentFilter.js"></script>
+<script type="text/javascript" src="assets/js/studentPagination.js"></script>
+
+
+
+
+<script type="text/javascript"
+	src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script type="text/javascript"
+	src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script type="text/javascript"
+	src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.21/af-2.3.5/b-1.6.2/b-colvis-1.6.2/b-flash-1.6.2/b-html5-1.6.2/b-print-1.6.2/cr-1.5.2/fc-3.3.1/fh-3.1.7/kt-2.5.2/r-2.2.5/rg-1.1.2/rr-1.2.7/sc-2.0.2/sp-1.1.1/sl-1.3.1/datatables.min.js"></script>
+
+
 
 <script type="text/javascript">
 	$("#btnStudentList")
@@ -187,7 +345,8 @@
 									dataType : "json",
 									async : true,
 									success : function(response) {
-										$("#listTableBody").empty();
+										$("#normalResults").empty();
+
 										var jsonResponse = JSON.parse(JSON
 												.stringify(response));
 										$("#studentListCard").css('display',
@@ -199,7 +358,25 @@
 												.each(
 														jsonResponse,
 														function(index, student) {
-															var html = "<tr><td><img src='"+student.imageName+"' height='100px' width='80px'/></td><td>"
+
+															var gridHtml = '<div class="row form-group">'
+																	+ '<div class="col-md-1"><img src="'+student.imageName+'" height="100px" width="80px"/></div>'
+																	+ '<div class="col-md-3">'
+																	+ student.firstName
+																	+ ' '
+																	+ student.lastName
+																	+ '</div> <div class="col-md-2">'
+																	+ student.mobileNumber
+																	+ '</div><div class="col-md-3">'
+																	+ student.emailId
+																	+ '</div> <div class="col-md-2">'
+																	+ student.registrationDate
+																	+ '</div><div class="col-md-1"><button class="btn btn-primary btn-sm" id="'
+																	+ student.studentId
+																	+ '" onclick="loadAcadDetails(this.id);">OPEN</button></div>'
+																	+ '</div>';
+
+															/* var html = "<tr><td><img src='"+student.imageName+"' height='100px' width='80px'/></td><td>"
 																	+ student.firstName
 																	+ " "
 																	+ student.lastName
@@ -207,15 +384,18 @@
 																	+ student.mobileNumber
 																	+ "</td><td>"
 																	+ student.emailId
+																	+ "</td><td>"
+																	+ student.registrationDate
 																	+ "</td><td><button class='btn btn-primary btn-sm' id='"
 																	+ student.studentId
-																	+ "' onclick='loadAcadDetails(this.id);'>OPEN</button></td></tr>";
+																	+ "' onclick='loadAcadDetails(this.id);'>OPEN</button></td></tr>"; */
 
-															$("#listTableBody")
+															$("#normalResults")
 																	.append(
-																			html);
+																			gridHtml);
 
 														})
+
 									},
 									error : function(error) {
 										alert("Error Occured While Fetching List");
@@ -228,11 +408,15 @@
 	$("#showRegister").click(function() {
 		$("#studentListCard").css('display', 'none');
 		$("#registerCard").css('display', 'block');
+		$("#pagedResultArea").show();
+		$("#fieldSearchDiv").hide();
+		$("#dateSearchDiv").hide();
+		$("#filterResultArea").empty();
+		$("#allPagedResults").prop('checked', true);
 
 	});
 
 	function loadAcadDetails(studentId) {
-		alert("Student Id==" + studentId);
 		$
 				.ajax({
 					type : "get",
@@ -298,4 +482,8 @@
 
 	}
 </script>
+
+
+
+
 </html>

@@ -12,6 +12,8 @@ import java.io.Serializable;
  * @version 0.1
  * 
  *          Created Date : 12-06-2020
+ * 
+ *          Updated Date : 19-06-2020
  *
  */
 public class Student implements Serializable {
@@ -27,6 +29,7 @@ public class Student implements Serializable {
 	private String mobileNumber;
 	private String emailId;
 	private String imageName;
+	private String registrationDate;
 	private File image;
 
 	/**
@@ -43,10 +46,11 @@ public class Student implements Serializable {
 	 * @param mobileNumber
 	 * @param emailId
 	 * @param imageName
+	 * @param registrationDate
 	 * @param image
 	 */
 	public Student(Integer studentId, String firstName, String lastName, String mobileNumber, String emailId,
-			String imageName, File image) {
+			String imageName, String registrationDate, File image) {
 		super();
 		this.studentId = studentId;
 		this.firstName = firstName;
@@ -54,6 +58,7 @@ public class Student implements Serializable {
 		this.mobileNumber = mobileNumber;
 		this.emailId = emailId;
 		this.imageName = imageName;
+		this.registrationDate = registrationDate;
 		this.image = image;
 	}
 
@@ -153,6 +158,20 @@ public class Student implements Serializable {
 	 */
 	public void setImage(File image) {
 		this.image = image;
+	}
+
+	/**
+	 * @return the registrationDate
+	 */
+	public String getRegistrationDate() {
+		return registrationDate;
+	}
+
+	/**
+	 * @param registrationDate the registrationDate to set
+	 */
+	public void setRegistrationDate(String registrationDate) {
+		this.registrationDate = registrationDate;
 	}
 
 }
